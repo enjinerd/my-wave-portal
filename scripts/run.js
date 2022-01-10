@@ -8,9 +8,24 @@ const main = async () => {
 
   let waveCount;
   waveCount = await waveContract.getTotalWaves();
+  let wavers;
 
   let waveTxn = await waveContract.wave();
   await waveTxn.wait();
+  waveTxn = await waveContract.addWavers(owner.address);
+  await waveTxn.wait();
+  await waveTxn.wait();
+
+  waveCount = await waveContract.getTotalWaves();
+
+  waveTxn = await waveContract.connect(randomPerson).wave();
+  await waveTxn.wait();
+  waveTxn = await waveContract
+    .connect(randomPerson)
+    .addWavers(randomPerson.address);
+  await waveTxn.wait();
+  waveCount = await waveContract.getTotalWaves();
+  wavers = await waveContract.iterateWavers();
 };
 
 const runMain = async () => {
